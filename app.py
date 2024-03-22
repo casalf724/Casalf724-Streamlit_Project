@@ -26,7 +26,7 @@ age = st.number_input("Age", min_value=1, max_value=150, value=30, step=1)
 height = st.number_input("Height (cm)", min_value=30, max_value=300, value=170, step=1)
 weight = st.number_input("Weight (kg)", min_value=1, max_value=500, value=70, step=1)
 
-gender_options = {"Female": 1, "Male": 0}stre
+gender_options = {"Female": 1, "Male": 0}
 gender = st.selectbox("Gender", options=list(gender_options.keys()))
 
 hypertension_options = {"Yes": 1, "No": 0}
