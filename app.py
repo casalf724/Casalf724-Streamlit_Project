@@ -2,6 +2,11 @@ import streamlit as st
 import pickle
 
 # Load the Light GBM Classifier model
+finalized_model_path = '/workspaces/Casalf724-Streamlit_Project/finalized_model.sav'
+with open(finalized_model_path, 'rb') as model_file:
+    model = pickle.load(model_file)
+
+
 with open('finalized_model.sav', 'rb') as model_file:
     model = pickle.load(model_file)
 
