@@ -1,4 +1,9 @@
 import streamlit as st
+import pickle
+
+# Load the Light GBM Classifier model
+with open('finalized_model.sav', 'rb') as model_file:
+    model = pickle.load(model_file)
 
 # Set page title and header
 st.title("Salusite – Diabetes Risk Calculator")
@@ -17,9 +22,9 @@ for stat, value in diabetes_statistics.items():
     st.write(f"- {stat}: {value}")
 
 # Add sliders for input parameters
-hba1c_level = st.slider("HbA1c Level", min_value=3.5, max_value=9.0, step=0.1, value=(6.0))
-blood_glucose_level = st.slider("Blood Glucose Level", min_value=60.0, max_value=400.0, step=1.0, value=(120.0))
-ahd_level = st.slider("AHD Level", min_value=0, max_value=100, step=1, value=(50))
+hba1c_level = st.slider("HbA1c Level", min_value=3.5, max_value=9.0, step=0.1, value=6.0)
+blood_glucose_level = st.slider("Blood Glucose Level", min_value=60.0, max_value=400.0, step=1.0, value=120.0)
+ahd_level = st.slider("AHD Level", min_value=0, max_value=100, step=1, value=50)
 
 # Add input fields for age, BMI, gender, and hypertension
 age = st.number_input("Age", min_value=1, max_value=150, value=30, step=1)
@@ -35,10 +40,16 @@ hypertension = st.selectbox("Hypertension", options=list(hypertension_options.ke
 # Convert height and weight to BMI
 bmi = weight / ((height / 100) ** 2)
 
-# Display calculated BMI
-st.write(f"Calculated BMI: {bmi:.2f}")
-
 # Button to calculate diabetes risk
 if st.button("Calculate Diabetes Risk"):
-    # Perform calculations and display results
-    st.write("Diabetes risk calculation goes here...")
+    # Preprocess input features
+    features = [hba1c_level, ahd_level, blood_glucose_level, age, bmi, gender_options[gender], hypertension_options[hypertension]]
+    
+    # Make prediction
+    prediction = model.predict([features])[0]
+    
+    # Convert prediction to high risk (1) or not high risk (0)
+    risk_label = "High Risk" if prediction == 1 else "Not High Risk"
+    
+    # Display prediction
+    st.write(f"Diabetes Risk Prediction: {risk_label}")
