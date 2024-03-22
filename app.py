@@ -2,11 +2,6 @@ import streamlit as st
 import pickle
 
 # Load the Light GBM Classifier model
-#finalized_model_path = '/workspaces/Casalf724-Streamlit_Project/finalized_model.sav'
-with open('finalized_model.sav', 'rb') as model_file:
-    model = pickle.load(model_file)
-
-
 with open('finalized_model.sav', 'rb') as model_file:
     model = pickle.load(model_file)
 
@@ -50,11 +45,15 @@ if st.button("Calculate Diabetes Risk"):
     # Preprocess input features
     features = [hba1c_level, ahd_level, blood_glucose_level, age, bmi, gender_options[gender], hypertension_options[hypertension]]
     
-    # Make prediction
-    prediction = model.predict([features])[0]
-    
-    # Convert prediction to high risk (1) or not high risk (0)
-    risk_label = "High Risk" if prediction == 1 else "Not High Risk"
-    
-    # Display prediction
-    st.write(f"Diabetes Risk Prediction: {risk_label}")
+    # Try-catch block for safe model prediction
+    try:
+        # Make prediction
+        prediction = model.predict([features])[0]
+        
+        # Convert prediction to high risk (1) or not high risk (0)
+        risk_label = "High Risk" if prediction == 1 else "Not High Risk"
+        
+        # Display prediction
+        st.write(f"Diabetes Risk Prediction: {risk_label}")
+    except Exception as e:
+        st.error(f"Error making prediction: {str(e)}")
