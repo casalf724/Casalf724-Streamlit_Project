@@ -10,7 +10,7 @@ with open('finalized_model.sav', 'rb') as model_file:
 scaler = StandardScaler()
 
 # Set page title and header
-st.title("Salusite – Diabetes Risk Calculator")
+st.title("SaluSite – Diabetes Risk Calculator")
 st.header("Background Information")
 st.write("Welcome to Salusite - Diabetes Risk Calculator. This application is designed to help assess the risk of diabetes based on various factors.")
 
