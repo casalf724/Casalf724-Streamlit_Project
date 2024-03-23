@@ -1,12 +1,16 @@
 import streamlit as st
 import pickle
+from sklearn.preprocessing import StandardScaler
 
 # Load the Light GBM Classifier model
 with open('finalized_model.sav', 'rb') as model_file:
     model = pickle.load(model_file)
 
+# Instantiate StandardScaler
+scaler = StandardScaler()
+
 # Set page title and header
-st.title("SaluSite – Diabetes Risk Calculator")
+st.title("Salusite – Diabetes Risk Calculator")
 st.header("Background Information")
 st.write("Welcome to Salusite - Diabetes Risk Calculator. This application is designed to help assess the risk of diabetes based on various factors.")
 
@@ -47,8 +51,11 @@ if st.button("Calculate Diabetes Risk"):
     
     # Try-catch block for safe model prediction
     try:
+        # Scale the input features
+        scaled_features = scaler.fit_transform([features])
+        
         # Make prediction
-        prediction = model.predict([features])[0]
+        prediction = model.predict(scaled_features)[0]
         
         # Convert prediction to high risk (1) or not high risk (0)
         risk_label = "High Risk" if prediction == 1 else "Not High Risk"
